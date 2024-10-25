@@ -9,8 +9,17 @@ import CoreML
 import SwiftUI
 
 struct ContentView: View {
+    //Adding a default wake up time for the users to 7AM
+    static var defaultWakeTime: Date {
+        //        creates a DateComponents object. DateComponents is a structure used to represent individual components of a date, such as hour, minute, day,
+        var components = DateComponents()
+        components.hour = 7
+        components.minute = 0
+        return Calendar.current.date(from: components) ?? .now
+    }
+
     //State variables for when to wake up, sleep amount and coffee amount
-    @State private var wakeUp = Date.now
+    @State private var wakeUp = defaultWakeTime
     @State private var sleepAmount = 8.0
     @State private var coffeeAmount = 1
 
@@ -21,23 +30,39 @@ struct ContentView: View {
 
     var body: some View {
         NavigationStack {
-            VStack {
-                Text("When do you want to wake up?")
-                    .font(.headline)
-                DatePicker(
-                    "Please enter a time", selection: $wakeUp,
-                    displayedComponents: .hourAndMinute
-                )
-                .labelsHidden()
-                Text("Desired amount of sleep")
-                    .font(.headline)
-                Stepper(
-                    "\(sleepAmount.formatted()) hours", value: $sleepAmount,
-                    in: 4...12, step: 0.25)
-                Text("Daily Coffee Intake")
-                    .font(.headline)
-                Stepper(
-                    "\(coffeeAmount) cup(s)", value: $coffeeAmount, in: 1...20)
+            Form {
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("When do you want to wake up?")
+                        .font(.headline)
+                    DatePicker(
+                        "Please enter a time", selection: $wakeUp,
+                        displayedComponents: .hourAndMinute
+                    )
+                    .labelsHidden()
+                }
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("Desired amount of sleep")
+                        .font(.headline)
+                    Stepper(
+                        "\(sleepAmount.formatted()) hours", value: $sleepAmount,
+                        in: 4...12, step: 0.25)
+                }
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("Daily Coffee Intake")
+                        .font(.headline)
+                    //                    Stepper(
+                    //                        "\(coffeeAmount) cup(s)", value: $coffeeAmount,
+                    //                        in: 1...20)
+                    Stepper(
+                        coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups",
+                        value: $coffeeAmount,
+                        in: 1...20)
+                    //OR
+//                    Stepper(
+//                        "^[\(coffeeAmount) cup](inflect:true)",
+//                        value: $coffeeAmount,
+//                        in: 1...20)
+                }
             }
             .navigationTitle("BetterRest")
             .toolbar {
