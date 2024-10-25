@@ -4,6 +4,9 @@ Designed to help coffee drinkers get a good night’s sleep by asking them three
 ## Model Training
 I trained my model with a CSV file containing the following fields:
 
--> “wake”: when the user wants to wake up. This is expressed as the number of seconds from midnight, so 8am would be 8 hours multiplied by 60 multiplied by 60, giving 28800.
--> “estimatedSleep”: roughly how much sleep the user wants to have, stored as values from 4 through 12 in quarter increments.
--> “coffee”: roughly how many cups of coffee the user drinks per day.
+Parameters
+wake: The desired wake-up time for the user, expressed as the number of seconds from midnight. For example, 8:00 AM would be calculated as 8 hours * 60 minutes * 60 seconds = 28800.
+
+estimatedSleep: The approximate amount of sleep the user wants to have. This value is represented in quarter-hour increments, ranging from 4 to 12 hours.
+
+coffee: The approximate number of cups of coffee the user consumes per day.
