@@ -5,6 +5,7 @@
 //  Created by Soumyadeep Chatterjee on 10/21/24.
 //
 
+import CoreML
 import SwiftUI
 
 struct ContentView: View {
@@ -42,7 +43,17 @@ struct ContentView: View {
     }
 
     func calculateBedTime() {
+        do {
+            //            Creates a configuration object
+            //            MLModelConfiguration- Used to specify how the CoreML will be loaded; such as settings related to memory, precision and compute resources
+            let config = MLModelConfiguration()
+            //            'try' is used because SleepCalcualator might throw an error
+            //            Errors like .mlmodel not found
+            let model = try SleepCalculator(configuration: config)
+        } catch {
+            //            catches any error thrown by try SleepCalculator(configuration: config).
 
+        }
     }
 }
 
