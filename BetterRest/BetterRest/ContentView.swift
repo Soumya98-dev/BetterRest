@@ -24,16 +24,16 @@ struct ContentView: View {
     @State private var coffeeAmount = 1
 
     //State variables to tell the user when to wake up
-    @State private var alertTitle = ""
-    @State private var alertMessage = ""
-    @State private var showingAlert = false
+    @State private var title = ""
+    @State private var message = ""
+    //    @State private var showingAlert = false
+    @State private var bedTime = ""
 
     var body: some View {
         NavigationStack {
             Form {
-                VStack(alignment: .leading, spacing: 0) {
+                VStack(alignment: .leading, spacing: 5) {
                     Text("When do you want to wake up?")
-                        .font(.headline)
                     DatePicker(
                         "Please enter a time", selection: $wakeUp,
                         displayedComponents: .hourAndMinute
@@ -48,36 +48,54 @@ struct ContentView: View {
                         in: 4...12, step: 0.25)
                 }
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("Daily Coffee Intake")
-                        .font(.headline)
+                    //                    Text("Daily Coffee Intake")
+                    //                        .font(.headline)
+                    //Stepper(
+                    //"\(coffeeAmount) cup(s)", value: $coffeeAmount,
+                    //in: 1...20)
                     //                    Stepper(
-                    //                        "\(coffeeAmount) cup(s)", value: $coffeeAmount,
+                    //                        coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups",
+                    //                        value: $coffeeAmount,
                     //                        in: 1...20)
-                    Stepper(
-                        coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups",
-                        value: $coffeeAmount,
-                        in: 1...20)
                     //OR
-//                    Stepper(
-//                        "^[\(coffeeAmount) cup](inflect:true)",
-//                        value: $coffeeAmount,
-//                        in: 1...20)
+                    //                    Stepper(
+                    //                        "^[\(coffeeAmount) cup](inflect:true)",
+                    //                        value: $coffeeAmount,
+                    //                        in: 1...20)
+                    Picker("Daily Coffee Intake", selection: $coffeeAmount) {
+                        ForEach(1..<21) { cups in
+                            Text(cups == 1 ? "1 cup" : "\(cups) cups")
+                        }
+                    }.pickerStyle(.navigationLink)
                 }
             }
             .navigationTitle("BetterRest")
-            .toolbar {
-                Button("Calculate", action: calculateBedTime)
-            }
-            .alert(alertTitle, isPresented: $showingAlert) {
-                Button("OK") {}
-            } message: {
-                Text(alertMessage)
-            }
+            //            .toolbar {
+            //                Button("Calculate", action: calculateBedTime)
+            //            }
+            //            .alert(alertTitle, isPresented: $showingAlert) {
+            //                Button("OK") {}
+            //            } message: {
+            //                Text(alertMessage)
+            //            }
         }
-
+        VStack {
+            Text("Recommended BedTime")
+                .font(.headline)
+                .padding()
+            Spacer()
+            Text(bedTime).font(.headline)
+                .padding()
+                .onAppear {
+                    bedTime = calculateBedTime()
+                }
+            Spacer()
+            Spacer()
+        }
+        .padding(.bottom, 0)
     }
 
-    func calculateBedTime() {
+    func calculateBedTime() -> String {
         do {
             //            Creates a configuration object
             //            MLModelConfiguration- Used to specify how the CoreML will be loaded; such as settings related to memory, precision and compute resources
@@ -108,17 +126,19 @@ struct ContentView: View {
             //Calculates the sleepTime; optimal time for user to got to sleep
             let sleepTime = wakeUp - prediction.actualSleep
 
-            alertTitle = "Your ideal bedtime is..."
-            alertMessage = sleepTime.formatted(date: .omitted, time: .shortened)
+            title = "Your ideal bedtime is "
+            message = sleepTime.formatted(date: .omitted, time: .shortened)
         } catch {
             //catches any error thrown by try SleepCalculator(configuration: config).
-            alertTitle = "ERROR"
-            alertMessage =
+            title = "ERROR"
+            message =
                 "Something went wrong, while calculating your be time"
 
         }
 
-        showingAlert = true
+        //        showingAlert = true
+
+        return title + message
     }
 }
 
