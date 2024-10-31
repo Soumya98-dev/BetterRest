@@ -10,3 +10,5 @@ Parameters
 2. estimatedSleep: The approximate amount of sleep the user wants to have. This value is represented in quarter-hour increments, ranging from 4 to 12 hours.
 
 3. coffee: The approximate number of cups of coffee the user consumes per day.
+
+![image](https://github.com/user-attachments/assets/4a16c44d-3d9c-47f6-a5dd-c8740d5c1856)
